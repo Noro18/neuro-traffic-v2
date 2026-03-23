@@ -2,7 +2,7 @@
 
 ## System Modelling
 
-Fase ida tuir mai ne'e halo tuir saida mak requirement engineering hanonin ona:
+Fase ida tuir mai ne'e halo tuir saida mak requirement engineering :
 
 ### 1. **Use Case Diagram** - Traffic Monitoring System
 
