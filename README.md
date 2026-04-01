@@ -17,6 +17,9 @@ Projetu Final ba Software Engineering
 
 ![Architecture](docs/images/Traffic%20Monitoring%20System%20Architecture.png)
 
+For further informatino refer to [Architecture](docs/ARCHITECTURE.md)
+For Project Overview check out [ProjectPlan](docs/PROJECT_PLAN.md)
+
 # 🛠️ Tech Stack 
 
 | Layer | Technology |
@@ -32,4 +35,4 @@ Projetu Final ba Software Engineering
 
 # 🫂 Kontribuisaun
 
-Refere ba file ida ne'e [Oinsa atu halo kontribuisaun ba Projetu ida ne'e](CONTRIBUTING.md)
+Refere ba file ida ne'e [Oinsa atu halo kontribuisaun ba Projetu ida ne'e](docs/CONTRIBUTION.md)
