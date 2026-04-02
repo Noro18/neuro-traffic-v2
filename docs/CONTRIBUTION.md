@@ -19,7 +19,12 @@ py manage.py tailwind install
 # 5. run migrations
 py manage.py migrate
 ```
-E depois RUn project ho terminal 2
+E depois RUn project ho terminal 2 
+
+kad atemrinal sei halo servisu differente 
+
+1. Terminal 1: run  Tailwind watcher (par auto realod tawilwind nian)
+2. atu run server uza `dapheene` (ita la uza `runserver`, tanba ita la uza HTTP maibe web socket)
 
 ```bash
 
@@ -36,10 +41,6 @@ daphne -p 8000 traffic_system.asgi:application
 
 
 
-# no atu run server 
-
-
-```
 
 
 iha ne'e sei esplika kona ba buat 2
