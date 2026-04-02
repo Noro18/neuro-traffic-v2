@@ -22,11 +22,23 @@ py manage.py migrate
 E depois RUn project ho terminal 2
 
 ```bash
+
+# ba iha direcotyr project django nian (iah ne'e mak ita nia app nia directory lolos)
+
+cd traffic_system # halo ba kada termianl 
+
 # Terminal 1 — Tailwind watcher
 py manage.py tailwind start
 
 # Terminal 2 — Django server(ita al uzza runserver tanba irt apresiza websocket no djanog server la supporta websocket )
 daphne -p 8000 traffic_system.asgi:application
+```
+
+
+
+# no atu run server 
+
+
 ```
 
 
