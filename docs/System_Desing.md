@@ -1,6 +1,6 @@
 
 # Portal Asesu (Authentication & Security)
-![alt text](Authentication.png)
+![alt text](images/Authentication.png)
 
 *Login Autentikasaun*
 
@@ -10,7 +10,7 @@ Operadór sira tenke hatama kreduisiál ne'ebé validu:
 
 
 # 1 Dashboard Sistema Monitorizasaun Tráfik
-![alt text](Dashboard_NeuroTraffic.png)
+![alt text](images/Dashboard_NeuroTraffic.png)
 ### Dashboard Prinsipál (Dashboard - Monitor Tráfegu)
 Hatudu geral cctv iha sidade nian tomak.
 ---
@@ -24,9 +24,9 @@ Sistema ida-ne'e dezenvolve hodi fó vizualizasaun dadus tráfiku nian iha tempu
 * **Analítika Kongestaun:** Gráfiku área ne'ebé hatudu trend densidade husi oras 08:00 to'o 20:00.
 ---
 ## 2 LIVE 
-![alt text](LIVE.png)
+![alt text](images/LIVE.png)
 * **Live kada fatin CCTV:**
-* ### . Mapeamentu Use Case (UML)
+
 Polísia Tránzitu nu'udar **Aktór Prinsipál** ne'ebé iha fonsionalidade tolu (3) boot:
 * **FR-01: Monitor Traffic Video** – Haree vídeo diretu husi kamera tráfiku nian.
 * **FR-02: View Congestion Analytics** – Analiza dadus Engrafamentu ne'ebé sistema foti ona.
@@ -41,7 +41,7 @@ Polísia Tránzitu nu'udar **Aktór Prinsipál** ne'ebé iha fonsionalidade tolu
 * **Analítika Kongestaun:** Gráfiku área ne'ebé hatudu trend densidade husi oras 08:00 to'o 20:00.
 
 ### 3. Sistema Alerta (Notifikasaun)
-![alt text](Alerta.png)
+![alt text](images/Alerta.png)
 **Pájina ida-ne'e fó prioridade ba kazu tráfegu sira ne'ebé presiza atensaun imediata husi operadór ka polísia iha terrenu**.
 
 Sistem avizu automátiku ba kazu sira ne'ebé akontese iha estrada hanesan Engrafamentu .
@@ -56,7 +56,7 @@ Sistema uza kódigu kór hodi fahe nivel urjénsia:
 
 
 ### 4. Dadus Istóriu (Analiza & Relatóriu)
-![alt text](History.png)
+![alt text](images/History.png)
 Pájina ida-ne'e serve nu'udar baze de dadus sentrál ne'ebé rai rejistu tráfegu hotu ho kualidade aas 
 * **Filtru**: Tuir ID Kamera, Tempu, ka Tipu veikulu.
 * **Esporta**: Suporta formatu `.csv` no `.pdf` ba relatóriu ofisiál polísia nian.
