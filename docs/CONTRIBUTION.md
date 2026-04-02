@@ -1,9 +1,13 @@
 # OINSA HALO KONTRIBUISAUN
 
+
+
+### Oinsa run Prepara no Run Project
+
 Antes atu halo kontribusaun install run command sira ne'e lai 
 
-```bash 
-# 1. pull latest code
+```bash
+# 1. pull uluk mudansa foun sira husi main 
 git pull origin main
 
 # 2. activate virtual environment (se laiha anta kria uluk nia lai ou hau send ba imi mos diak)
@@ -13,18 +17,19 @@ venv\Scripts\activate           # Windows
 # 3. install python dependencies
 pip install -r requirements.txt
 
-# 4. install tailwind standalone binary
+# 4. install tailwind nia binary sira
 py manage.py tailwind install
 
 # 5. run migrations
 py manage.py migrate
 ```
-E depois RUn project ho terminal 2 
 
-kad atemrinal sei halo servisu differente 
+E depois Run project ho **terminal 2** 
 
-1. Terminal 1: run  Tailwind watcher (par auto realod tawilwind nian)
-2. atu run server uza `dapheene` (ita la uza `runserver`, tanba ita la uza HTTP maibe web socket)
+kada temrinal sei halo servisu differente 
+
+1. **Terminal** 1: run  Tailwind watcher (par auto realod tawilwind nian)
+2. **Terminal 2**: atu run server uza `dapheene` (ita la uza `runserver`, tanba ita la uza HTTP maibe web socket)
 
 ```bash
 
@@ -39,13 +44,10 @@ py manage.py tailwind start
 daphne -p 8000 traffic_system.asgi:application
 ```
 
+## iha ne'e sei esplika kona ba buat **2**
 
-
-
-
-iha ne'e sei esplika kona ba buat 2
-1. Oinsa halo kontribuisaun no kolabora iha projetu ida ne'e 
-2. Padraun kodigo no regras sira wainhira halo development 
+1. Oinsa halo kontribuisaun no kolabora iha projetu ida ne'e
+2. Padraun kodigo no regras sira wainhira halo development
 
 ## Oinsa atu kolabora (Flow kolaboarasaun ho git no github)
 
@@ -57,7 +59,6 @@ git clone https://github.com/Noro18/omen-finance-tracker.git
 
 ### 📌 Rules
 
-
 1. **Labele commit direita ba main branch**
 
 ```
@@ -65,9 +66,9 @@ git push origin main ❌
 git push origin <branch-ne'ebe imi kria> ✅
 ```
 
+1. Antes atu halo buat ruma make sure tuir workflow iha kraik
+2. fo naran ba branch no commit tenki tuir rules iha kraik
 
-2. Antes atu halo buat ruma make sure tuir workflow iha kraik
-3. fo naran ba branch no commit tenki tuir rules iha kraik 
 No mos make sure imi nia main branch iha local repo up to date ho remote repo
 
 ```bash
@@ -78,8 +79,7 @@ depois mak foin tuir step tuir mai mak branchin
 
 ### Branching
 
-
-2. kria branch rasik 
+1. kria branch rasik
 
 wainhria fo naran branch tenki ho formatu 
 
@@ -89,16 +89,17 @@ prefixo/tugas_nebe_halo
 
 ba tugas nian tenki separa ho underscore (_)
 
-
 #### Prefix Komum
 
-| Prefix          | Signifikadu / Uza | Exemplu |
-|-----------------|-----------------|--------|
-| `feature/`      | feature foun ka melhoria | `feature/login` |
-| `bugfix/`       | Resolve problema ka bug | `bugfix/fix-navbar` |
-| `hotfix/`       | Correção urgente ba main branch | `hotfix/security-patch` |
-| `docs/`         | Alterasaun iha dokumentasaun | `docs/readme-update` |
-| `test/`         | Branch test ka eksperimentu | `test/new-api` |
+
+| Prefix     | Signifikadu / Uza               | Exemplu                 |
+| ---------- | ------------------------------- | ----------------------- |
+| `feature/` | feature foun ka melhoria        | `feature/login`         |
+| `bugfix/`  | Resolve problema ka bug         | `bugfix/fix-navbar`     |
+| `hotfix/`  | Correção urgente ba main branch | `hotfix/security-patch` |
+| `docs/`    | Alterasaun iha dokumentasaun    | `docs/readme-update`    |
+| `test/`    | Branch test ka eksperimentu     | `test/new-api`          |
+
 
 Atu kria branch ita uza command 
 
@@ -106,8 +107,8 @@ Atu kria branch ita uza command
 git checkout -b <branch-nia-naran>
 ```
 
-3. coding ka halo servisu 
-4. Push branch ba iha repo 
+1. coding ka halo servisu
+2. Push branch ba iha repo
 
 depois de ita halo ita nia servisu ita bele push branch ba iha remote repo.
 
@@ -117,11 +118,12 @@ git push origin <naran-branch>
 
 📌 **LABELE MERGE ULUK BA MAIN BRANCXH**
 
-5. Deopis mak owner repo sei revew no merge ba iha main branch
+1. Deopis mak owner repo sei revew no merge ba iha main branch
 
 ### COMMIT
 
 Wainhria commit make sure commit se wianhira ita halo mudansa logical oan ida  exemplo
+
 - Diak: "Aumenta nav bar"
 - La diak: "Update buat hout"
 
@@ -130,12 +132,15 @@ Make sure atu **commit hela** diet maihbe **laos kda liafuan ketik ne'e commit**
 #### Oinsa hakrek commit message
 
 Formato:
+
 ```bash
 <tipo>(<scope>): <deskrisaun barak>
 
 <Deskrisaun optional saida mak ita halo no tanba sa>
 ```
+
 exemplo:
+
 ```
 feature(dashboard): Aumenta Nav Bar
 
@@ -144,15 +149,17 @@ Aumenta nav bar ho menu foun no style foun. TAnba butaun navigasaun ba pagina A 
 
 ##### 1. Tipu Commit (Commit Type)
 
-| Tipu       | Signifikadu / Uza | Exempu |
-|-----------|-----------------|--------|
-| `feat`    | Função foun / feature | `feat(auth): add login form validation` |
-| `fix`     | Halo korrekasaun ba bug | `fix(transactions): correct total amount calculation` |
-| `docs`    | Alterasaun iha dokumentasaun | `docs(readme): add installation instructions` |
-| `style`   | Formata ka naran codigo, la hanesan bug fix | `style(dashboard): format dashboard cards` |
-| `refactor`| Refatoriza codigo, la inclui feature ka fix | `refactor(auth): simplify login validation logic` |
-| `test`    | Adisiona ka korrije tests | `test(transactions): add unit tests for recurring payments` |
-| `chore`   | Manutensaun, update dependencies | `chore(settings): update default notification values` |
+
+| Tipu       | Signifikadu / Uza                           | Exempu                                                      |
+| ---------- | ------------------------------------------- | ----------------------------------------------------------- |
+| `feat`     | Função foun / feature                       | `feat(auth): add login form validation`                     |
+| `fix`      | Halo korrekasaun ba bug                     | `fix(transactions): correct total amount calculation`       |
+| `docs`     | Alterasaun iha dokumentasaun                | `docs(readme): add installation instructions`               |
+| `style`    | Formata ka naran codigo, la hanesan bug fix | `style(dashboard): format dashboard cards`                  |
+| `refactor` | Refatoriza codigo, la inclui feature ka fix | `refactor(auth): simplify login validation logic`           |
+| `test`     | Adisiona ka korrije tests                   | `test(transactions): add unit tests for recurring payments` |
+| `chore`    | Manutensaun, update dependencies            | `chore(settings): update default notification values`       |
+
 
 **Regra geral:** primeira palavra (tipu) tenke deskreve buat ne'ebé commit halo.
 
@@ -161,23 +168,25 @@ Aumenta nav bar ho menu foun no style foun. TAnba butaun navigasaun ba pagina A 
 #### 2. Scope (Área / Modulu commit)
 
 - Scope mak parte spesífiku husi app ka projekto ne'ebé commit halo.  
-- Klaru hodi hatudu *onde* commit muda kode.  
- 
+- Klaru hodi hatudu *onde* commit muda kode.
+
 **Exemplu ba Finance Tracker App:**
 
-| Scope         | Buat ne'ebé implica | Exempu commit message |
-|---------------|-------------------|---------------------|
-| `auth`        | Login, signup, password reset | `feat(auth): add login form validation` |
-| `transactions`| Adisiona, edit, remove transasaun | `feat(transactions): allow adding recurring expenses` |
-| `dashboard`   | Pagina principal, overview user | `fix(dashboard): correct total balance calculation` |
-| `reports`     | Charts, export, relatórios | `feat(reports): add monthly spending chart` |
-| `settings`    | Preferensia user, notifications | `chore(settings): update notification defaults` |
-| `readme`      | Dokumentasaun | `docs(readme): add installation instructions` |
+
+| Scope          | Buat ne'ebé implica               | Exempu commit message                                 |
+| -------------- | --------------------------------- | ----------------------------------------------------- |
+| `auth`         | Login, signup, password reset     | `feat(auth): add login form validation`               |
+| `transactions` | Adisiona, edit, remove transasaun | `feat(transactions): allow adding recurring expenses` |
+| `dashboard`    | Pagina principal, overview user   | `fix(dashboard): correct total balance calculation`   |
+| `reports`      | Charts, export, relatórios        | `feat(reports): add monthly spending chart`           |
+| `settings`     | Preferensia user, notifications   | `chore(settings): update notification defaults`       |
+| `readme`       | Dokumentasaun                     | `docs(readme): add installation instructions`         |
+
 
 **Regra geral:**  
+
 - Escolhe scope ne'ebé mais especifica ne'ebé commit muda.  
 - Se commit muda ema-liu modulu, split commit ba scope independente ka uza scope gerál `app`.
-
 
 # Rezumo Workflow (TL:DR)
 
@@ -230,9 +239,9 @@ git push origin <branch-ba-feature-foun>
 # ba github no kria pull request
 ```
 
-![git-workflow](docs/images/diagram-workflow-git.png)
+git-workflow
 
-## 📌 REGRAS BA DEVELOPMENT 
+## 📌 REGRAS BA DEVELOPMENT
 
 # Django Coding Style Guide
 
@@ -243,9 +252,10 @@ git push origin <branch-ba-feature-foun>
 ---
 
 ## 1. Imports — Order Matters
-$$
 
 $$
+
+$$  
 Always group imports in this order, with a blank line between each group:
 
 ```python
@@ -270,7 +280,7 @@ from apps.transactions.models import Transaction
 
 - Class names are **PascalCase** (capitalize each word)
 - Field names are **lowercase_with_underscores**
-- Always add `__str__` so objects show readable names in the admin panel
+- Always add `__str_`_ so objects show readable names in the admin panel
 - Always add `class Meta` for ordering and verbose names
 - Choices go at the top of the class as constants
 
@@ -337,11 +347,14 @@ class TransactionCreateView(CreateView):
 ```
 
 **Rule of thumb:**
-| Situation | Use |
-|---|---|
-| Simple page, no form | Function Based View |
-| Create, Read, Update, Delete | Class Based View |
+
+
+| Situation                     | Use                 |
+| ----------------------------- | ------------------- |
+| Simple page, no form          | Function Based View |
+| Create, Read, Update, Delete  | Class Based View    |
 | Custom logic, multiple models | Function Based View |
+
 
 ---
 
@@ -421,13 +434,16 @@ In templates, always reference URLs by name — **never hardcode paths:**
 {% endblock %}
 ```
 
-**Available blocks in `base.html`:**
-| Block | Purpose |
-|---|---|
-| `{% block title %}` | Sets the browser tab title |
-| `{% block content %}` | Main page content goes here |
-| `{% block extra_css %}` | Page-specific styles |
-| `{% block extra_js %}` | Page-specific JavaScript |
+**Available blocks in** `base.html`**:**
+
+
+| Block                   | Purpose                     |
+| ----------------------- | --------------------------- |
+| `{% block title %}`     | Sets the browser tab title  |
+| `{% block content %}`   | Main page content goes here |
+| `{% block extra_css %}` | Page-specific styles        |
+| `{% block extra_js %}`  | Page-specific JavaScript    |
+
 
 ---
 
@@ -484,7 +500,7 @@ DATABASES = {
 
 ## 8. Git Rules
 
-- **Never commit directly to `main`** — always work on a feature branch
+- **Never commit directly to** `main` — always work on a feature branch
 - One branch per feature or app
 
 ```bash
@@ -511,17 +527,19 @@ git commit -m "add spending prediction view"
 
 ## 9. Golden Rules Summary
 
-| Rule | Example |
-|---|---|
-| Models = PascalCase | `class Transaction` |
-| Fields and functions = snake_case | `transaction_type`, `get_total()` |
-| Always add `__str__` to every model | `return f"{self.amount}"` |
-| Never hardcode URLs in templates | `{% url 'transactions:add' %}` |
-| Keep views thin | Move logic to `models.py` or `services.py` |
-| One app = one responsibility | `transactions` app only handles transactions |
-| Name every URL | `name='list'`, `name='add'` |
-| Never commit secrets to GitHub | Use `os.environ.get()` |
-| Always work on a feature branch | `git checkout -b feature/transactions` |
+
+| Rule                                | Example                                      |
+| ----------------------------------- | -------------------------------------------- |
+| Models = PascalCase                 | `class Transaction`                          |
+| Fields and functions = snake_case   | `transaction_type`, `get_total()`            |
+| Always add `__str_`_ to every model | `return f"{self.amount}"`                    |
+| Never hardcode URLs in templates    | `{% url 'transactions:add' %}`               |
+| Keep views thin                     | Move logic to `models.py` or `services.py`   |
+| One app = one responsibility        | `transactions` app only handles transactions |
+| Name every URL                      | `name='list'`, `name='add'`                  |
+| Never commit secrets to GitHub      | Use `os.environ.get()`                       |
+| Always work on a feature branch     | `git checkout -b feature/transactions`       |
+
 
 ---
 
@@ -559,7 +577,7 @@ from apps.transactions.models import Transaction
 
 - Class names are **PascalCase** (capitalize each word)
 - Field names are **lowercase_with_underscores**
-- Always add `__str__` so objects show readable names in the admin panel
+- Always add `__str_`_ so objects show readable names in the admin panel
 - Always add `class Meta` for ordering and verbose names
 - Choices go at the top of the class as constants
 
@@ -626,11 +644,14 @@ class TransactionCreateView(CreateView):
 ```
 
 **Rule of thumb:**
-| Situation | Use |
-|---|---|
-| Simple page, no form | Function Based View |
-| Create, Read, Update, Delete | Class Based View |
+
+
+| Situation                     | Use                 |
+| ----------------------------- | ------------------- |
+| Simple page, no form          | Function Based View |
+| Create, Read, Update, Delete  | Class Based View    |
 | Custom logic, multiple models | Function Based View |
+
 
 ---
 
@@ -710,13 +731,16 @@ In templates, always reference URLs by name — **never hardcode paths:**
 {% endblock %}
 ```
 
-**Available blocks in `base.html`:**
-| Block | Purpose |
-|---|---|
-| `{% block title %}` | Sets the browser tab title |
-| `{% block content %}` | Main page content goes here |
-| `{% block extra_css %}` | Page-specific styles |
-| `{% block extra_js %}` | Page-specific JavaScript |
+**Available blocks in** `base.html`**:**
+
+
+| Block                   | Purpose                     |
+| ----------------------- | --------------------------- |
+| `{% block title %}`     | Sets the browser tab title  |
+| `{% block content %}`   | Main page content goes here |
+| `{% block extra_css %}` | Page-specific styles        |
+| `{% block extra_js %}`  | Page-specific JavaScript    |
+
 
 ---
 
@@ -773,7 +797,7 @@ DATABASES = {
 
 ## 8. Git Rules
 
-- **Never commit directly to `main`** — always work on a feature branch
+- **Never commit directly to** `main` — always work on a feature branch
 - One branch per feature or app
 
 ```bash
@@ -800,17 +824,19 @@ git commit -m "add spending prediction view"
 
 ## 9. Golden Rules Summary
 
-| Rule | Example |
-|---|---|
-| Models = PascalCase | `class Transaction` |
-| Fields and functions = snake_case | `transaction_type`, `get_total()` |
-| Always add `__str__` to every model | `return f"{self.amount}"` |
-| Never hardcode URLs in templates | `{% url 'transactions:add' %}` |
-| Keep views thin | Move logic to `models.py` or `services.py` |
-| One app = one responsibility | `transactions` app only handles transactions |
-| Name every URL | `name='list'`, `name='add'` |
-| Never commit secrets to GitHub | Use `os.environ.get()` |
-| Always work on a feature branch | `git checkout -b feature/transactions` |
+
+| Rule                                | Example                                      |
+| ----------------------------------- | -------------------------------------------- |
+| Models = PascalCase                 | `class Transaction`                          |
+| Fields and functions = snake_case   | `transaction_type`, `get_total()`            |
+| Always add `__str_`_ to every model | `return f"{self.amount}"`                    |
+| Never hardcode URLs in templates    | `{% url 'transactions:add' %}`               |
+| Keep views thin                     | Move logic to `models.py` or `services.py`   |
+| One app = one responsibility        | `transactions` app only handles transactions |
+| Name every URL                      | `name='list'`, `name='add'`                  |
+| Never commit secrets to GitHub      | Use `os.environ.get()`                       |
+| Always work on a feature branch     | `git checkout -b feature/transactions`       |
+
 
 ---
 
@@ -859,4 +885,8 @@ finance-tracker/
 ├── requirements.txt
 └── .gitignore
 ```
+
 ```
+
+```
+
