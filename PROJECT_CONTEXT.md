@@ -7,7 +7,7 @@
 
 ## Project Overview
 
-A real-time traffic monitoring web application built as a 4-month Software Engineering course project. The system processes pre-recorded video footage, detects and classifies vehicles using a custom-trained YOLOv8 Nano model exported to ONNX format, displays the annotated video feed live on a web dashboard, and logs all vehicle detections to a database with live vehicle counts.
+A real-time traffic monitoring web application built as a 4-month Software Engineering course project. The system processes pre-recorded video footage, detects and classifies vehicles using a custom-trained YOLOv8 Nano model (`.pt` format), displays the annotated video feed live on a web dashboard, and logs all vehicle detections to a database with live vehicle counts.
 
 ---
 
@@ -18,8 +18,8 @@ A real-time traffic monitoring web application built as a 4-month Software Engin
 3. User clicks **Start Processing**
 4. Django starts a background Python thread
 5. The background thread reads the video frame by frame using OpenCV
-6. Each frame is passed through the ONNX inference engine (YOLOv8 Nano)
-7. ONNX returns bounding boxes, class labels, and confidence scores for each detected vehicle
+6. Each frame is passed through the Ultralytics YOLOv8 inference engine
+7. Ultralytics returns bounding boxes, class labels, and confidence scores for each detected vehicle
 8. Bounding boxes are drawn onto the frame manually using OpenCV
 9. The vehicle's center point is checked against a virtual counting line
 10. If a vehicle crosses the counting line it is added to an in-memory counter and pushed to a detection queue
@@ -38,8 +38,8 @@ Pre-recorded Video File
         ↓
 OpenCV reads frame-by-frame
         ↓
-ONNX Runtime inference on each frame
-(YOLOv8 Nano exported to .onnx)
+Ultralytics YOLOv8 Nano inference on each frame
+(YOLOv8 Nano .pt model)
         ↓                         ↓
 Draw bounding boxes          Check line crossing
 on frame using OpenCV        ↓
@@ -74,8 +74,8 @@ video frame           cards update
 | Real-time Communication  | Django Channels (WebSocket)       |
 | ASGI Server              | Daphne                            |
 | Channel Layer            | InMemoryChannelLayer              |
-| ML Inference Engine      | ONNX Runtime                      |
-| Model Format             | ONNX (.onnx) exported from YOLOv8 |
+| ML Inference Engine      | Ultralytics (YOLOv8)              |
+| Model Format             | PyTorch (.pt)                     |
 | Video Processing         | OpenCV (cv2)                      |
 | Frame Data Handling      | NumPy                             |
 | Database                 | SQLite (via Django ORM)           |
@@ -84,21 +84,20 @@ video frame           cards update
 
 ---
 
-## Why ONNX Instead of Ultralytics Directly
+## Why Ultralytics Directly Instead of ONNX
 
-The trained model is a YOLOv8 Nano `.pt` file (PyTorch format). Running it directly requires Ultralytics which pulls in PyTorch — a ~900MB download. For contributors with slow internet (100 KBps), this is impractical.
-
-The solution is to convert the model once to ONNX format:
+The trained model is a YOLOv8 Nano `.pt` file (PyTorch format). The project runs inference directly using the Ultralytics library, which handles preprocessing, NMS, and postprocessing automatically — reducing boilerplate code significantly.
 
 ```python
 from ultralytics import YOLO
+
 model = YOLO("best.pt")
-model.export(format="onnx")  # produces best.onnx
+results = model(frame)
 ```
 
-After conversion, PyTorch and Ultralytics can be uninstalled. The `.onnx` file is committed to the repository. Contributors only need to install `onnxruntime` (~15MB) to run inference — no PyTorch required.
+This requires PyTorch and Ultralytics but is simpler to maintain and gives access to the full Ultralytics API including built-in NMS, confidence filtering, and class label mapping. There is no need for manual preprocessing or postprocessing steps.
 
-**Important:** The `.pt` file is a PyTorch file. Ultralytics is built on top of PyTorch and cannot work without it. PyTorch runs silently underneath Ultralytics even though you don't see it in your code. The conversion is a one-time step done by the project owner.
+**Note:** An earlier version of this project planned to use ONNX Runtime to avoid the large PyTorch download (~900MB) for contributors with slow internet. Since connectivity is no longer a constraint, the project now uses Ultralytics directly with the `.pt` model file.
 
 ---
 
@@ -119,36 +118,37 @@ Key operations:
 
 ---
 
-### 2. ONNX Runtime
-**Role:** Runs inference on each frame using the exported YOLOv8 model.
+### 2. Ultralytics YOLOv8
+**Role:** Runs inference on each frame using the YOLOv8 Nano `.pt` model.
 
-ONNX Runtime loads the `best.onnx` file and runs the neural network forward pass on each frame to produce detections. It returns raw output tensors containing bounding box coordinates, confidence scores, and class IDs.
+Ultralytics loads the `best.pt` file and runs the neural network forward pass on each frame to produce detections. It automatically handles preprocessing, NMS, and postprocessing — returning ready-to-use bounding boxes, confidence scores, and class IDs.
 
 Key operations:
-- `onnxruntime.InferenceSession("models/best.onnx")` — loads the model
-- `session.run(output_names, {input_name: preprocessed_frame})` — runs inference
-- Output shape: `[1, num_classes + 4, num_anchors]` — needs post-processing to extract boxes
+- `YOLO("models/best.pt")` — loads the model
+- `model(frame)` — runs inference and returns results
+- `results[0].boxes` — access bounding boxes, confidence scores, and class IDs
 
-Pre-processing required before passing frame to ONNX:
 ```python
-# resize to model input size, normalize, transpose
-frame_resized = cv2.resize(frame, (640, 640))
-frame_normalized = frame_resized / 255.0
-frame_transposed = frame_normalized.transpose(2, 0, 1)  # HWC to CHW
-frame_input = frame_transposed[np.newaxis, :].astype(np.float32)  # add batch dim
+from ultralytics import YOLO
+
+model = YOLO("models/best.pt")
+
+results = model(frame)
+for box in results[0].boxes:
+    x1, y1, x2, y2 = map(int, box.xyxy[0])
+    confidence = float(box.conf[0])
+    class_id = int(box.cls[0])
+    label = model.names[class_id]
 ```
 
-Post-processing required on ONNX output:
-- Apply confidence threshold (e.g. 0.5) to filter weak detections
-- Apply Non-Maximum Suppression (NMS) to remove duplicate boxes
-- Scale bounding box coordinates back to original frame size
+No manual preprocessing or NMS required — Ultralytics handles it all internally.
 
 ---
 
 ### 3. Python Background Thread
 **Role:** Runs the entire video processing loop without blocking Django.
 
-Django's main process handles HTTP requests and WebSocket connections. If video processing ran inside Django directly it would block everything. A separate daemon thread runs the OpenCV + ONNX loop independently.
+Django's main process handles HTTP requests and WebSocket connections. If video processing ran inside Django directly it would block everything. A separate daemon thread runs the OpenCV + Ultralytics loop independently.
 
 ```python
 import threading
@@ -454,7 +454,7 @@ traffic_monitor/
 ├── requirements.txt
 ├── db.sqlite3                        # auto-created after migrate
 ├── models/
-│   └── best.onnx                     # exported YOLOv8 ONNX model
+│   └── best.pt                       # YOLOv8 Nano PyTorch model
 ├── media/
 │   └── videos/                       # uploaded video files stored here
 ├── core/
@@ -462,7 +462,7 @@ traffic_monitor/
 │   ├── __init__.py
 │   ├── models.py                     # VideoSession, Detection models
 │   ├── consumers.py                  # WebSocket consumer
-│   ├── video_processor.py            # OpenCV + ONNX background thread
+│   ├── video_processor.py            # OpenCV + Ultralytics background thread
 │   ├── views.py                      # dashboard view, video upload
 │   ├── urls.py
 │   └── templates/
@@ -483,16 +483,7 @@ traffic_monitor/
 ### Prerequisites
 - Python 3.10+
 - pip
-- `best.onnx` — your YOLOv8 model exported to ONNX format
-
-### One-Time Model Conversion (project owner only)
-This requires Ultralytics + PyTorch (~900MB). Do this once, commit `best.onnx`, then uninstall:
-
-```bash
-pip install ultralytics
-python -c "from ultralytics import YOLO; YOLO('best.pt').export(format='onnx')"
-pip uninstall torch torchvision ultralytics -y
-```
+- `best.pt` — your trained YOLOv8 Nano model file
 
 ### Installation for All Contributors
 ```bash
@@ -517,10 +508,8 @@ channels
 daphne
 opencv-python
 numpy
-onnxruntime
+ultralytics
 ```
-
-Total download size for contributors: ~100MB (no PyTorch).
 
 ---
 
@@ -608,8 +597,8 @@ websocket_urlpatterns = [
 
 ## Performance Optimizations
 
-### 1. ONNX over PyTorch
-ONNX Runtime is faster than PyTorch on CPU for inference because it applies graph optimizations and uses efficient C++ execution providers under the hood.
+### 1. Ultralytics Built-in Pipeline
+Ultralytics handles preprocessing, NMS, and postprocessing internally — no manual implementation needed. This reduces code complexity and potential bugs compared to a manual ONNX pipeline.
 
 ### 2. Bulk Database Writes
 All detections within a 1-second window are saved in a single `bulk_create()` call instead of individual `create()` calls. Reduces DB calls from ~150/sec to 1/sec.
@@ -653,11 +642,9 @@ The line is drawn visually on every frame so users can see it.
 
 | Term | Meaning |
 |---|---|
-| **ONNX** | Open Neural Network Exchange — universal AI model format |
-| **ONNX Runtime** | Lightweight engine (~15MB) that runs .onnx model files |
 | **YOLOv8 Nano** | Smallest and fastest variant of YOLOv8, good for CPU inference |
-| **.pt file** | PyTorch model weights file — requires PyTorch to load |
-| **.onnx file** | ONNX model file — runs on ONNX Runtime, no PyTorch needed |
+| **Ultralytics** | Python library that provides the YOLOv8 API including inference, NMS, and postprocessing |
+| **.pt file** | PyTorch model weights file — loaded directly by Ultralytics |
 | **WebSocket** | Protocol for persistent two-way connection between browser and server |
 | **Django Channels** | Django extension that adds WebSocket support |
 | **InMemoryChannelLayer** | In-process message bus for passing data between threads and consumers |
@@ -666,7 +653,7 @@ The line is drawn visually on every frame so users can see it.
 | **Canvas** | HTML element for drawing graphics with JavaScript |
 | **base64** | Encoding scheme that converts binary data (JPEG) to a text string for JSON transfer |
 | **bulk_create()** | Django ORM method to insert many rows in a single SQL statement |
-| **NMS** | Non-Maximum Suppression — removes duplicate bounding boxes from YOLO output |
+| **NMS** | Non-Maximum Suppression — removes duplicate bounding boxes, handled automatically by Ultralytics |
 | **Bounding Box** | Rectangle coordinates [x1, y1, x2, y2] around a detected vehicle |
 | **Confidence Score** | How certain YOLO is about a detection, 0.0 to 1.0 |
 | **Line Crossing** | Technique to count a vehicle exactly once when it crosses a virtual line |
@@ -691,7 +678,7 @@ The line is drawn visually on every frame so users can see it.
 - Replace InMemoryChannelLayer with Redis for multi-user support
 - Replace SQLite with PostgreSQL for production
 - Deploy edge devices (NVIDIA Jetson Nano ~$150 each) at each camera
-- Each edge device runs its own ONNX inference locally
+- Each edge device runs its own inference locally
 - Only sends count data (not video) to the central server — saves 99% bandwidth
 - Add speed estimation using frame delta and perspective calibration
 - Add traffic density heatmap from accumulated bounding box positions
